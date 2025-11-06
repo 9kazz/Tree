@@ -37,18 +37,54 @@ TreeErr_t Graphic_Dump_Node(const TreeNode_t* node) {
     return END_WITH_SUC;
 }
 
-TreeErr_t Dump_Node_in_line(const TreeNode_t* node, FILE* output_file) {
+TreeErr_t Dump_Node_preorder(const TreeNode_t* node, FILE* output_file) {
     assert(node);
 
     fprintf(output_file, "(");
 
-    fprintf(output_file, "%d", node->data);
+    fprintf(output_file, "%s", node->data);
 
     if (node->left)
-        Dump_Node_in_line(node->left, output_file);
+        Dump_Node_preorder(node->left, output_file);
 
     if (node->right)
-        Dump_Node_in_line(node->right, output_file);
+        Dump_Node_preorder(node->right, output_file);
+
+    fprintf(output_file, ")");
+
+    return END_WITH_SUC;
+}
+
+TreeErr_t Dump_Node_postorder(const TreeNode_t* node, FILE* output_file) {
+    assert(node);
+
+    fprintf(output_file, "(");
+
+    if (node->left)
+        Dump_Node_postorder(node->left, output_file);
+    
+    if (node->right)
+        Dump_Node_postorder(node->right, output_file);
+        
+    fprintf(output_file, "%s", node->data);
+
+    fprintf(output_file, ")");
+
+    return END_WITH_SUC;
+}
+
+TreeErr_t Dump_Node_inorder(const TreeNode_t* node, FILE* output_file) {
+    assert(node);
+
+    fprintf(output_file, "(");
+
+    if (node->left)
+        Dump_Node_inorder(node->left, output_file);
+
+    fprintf(output_file, "%s", node->data);
+
+    if (node->right)
+        Dump_Node_inorder(node->right, output_file);
 
     fprintf(output_file, ")");
 
@@ -68,7 +104,7 @@ TreeErr_t Print_Node_to_Graphviz(const TreeNode_t* node, FILE* output_file) {
     if (node->right)
         Print_Node_to_Graphviz(node->right, output_file);
 
-    fprintf(output_file, "\tnode_%d [label = \" {%d | %p | {<left> %p | <right> %p}}\", rank = %d]\n", node, node->data, node, node->left, node->right, node_rank);
+    fprintf(output_file, "\tnode_%d [label = \" { %s | %p | {<left> %p | <right> %p}}\", rank = %d]\n", node, node->data, node, node->left, node->right, node_rank);
 
     if (node->left)
         fprintf(output_file, "\tnode_%d: <left> -> node_%d\n", node, node->left);
@@ -86,8 +122,14 @@ TreeErr_t Dump_Node_to_HTML(const TreeNode_t* node, const char* image_file_name)
     fprintf(Logfile, "<pre>\n");
     fprintf(Logfile, "\t<h2> Dump of tree: </h2>\n");
 
-    fprintf(Logfile, "<h3>\n");
-    Dump_Node_in_line(node, Logfile);
+    fprintf(Logfile, "<h3>Preorder: ");
+    Dump_Node_preorder(node, Logfile);
+
+    fprintf(Logfile, "\n\nPostorder:");
+    Dump_Node_postorder(node, Logfile);
+
+    fprintf(Logfile, "\n\nInorder:  ");
+    Dump_Node_inorder(node, Logfile);
     fprintf(Logfile, "</h3>\n");
 
     fprintf(Logfile, "\n<h3>\tImage:</h3>\n");

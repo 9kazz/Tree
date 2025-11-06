@@ -21,10 +21,18 @@ TreeNode_t* Node_Ctor(TreeElem_t data, TreeNode_t* left, TreeNode_t* right) {
 }
 
 TreeErr_t Node_Dtor(TreeNode_t* node) {
+    assert(node);
+
     if ( ! node) {
         fprintf(stderr, "Node_Dtor: NULL-pointer to TreeNode_t\n");
         return EC_NULL_POINTER;
     }
+
+    if (node->left)
+        Node_Dtor(node->left);
+    
+    if (node->right)
+        Node_Dtor(node->right);
 
     free(node);
 
@@ -38,7 +46,7 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
 
     while(node_ptr != NULL)
     {
-        if (value <= node_ptr->data)
+        if ( atoi(value) <= atoi(node_ptr->data) )
         {
             if (node_ptr->left == NULL) 
             {
@@ -67,7 +75,6 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
 
     return NULL;
 }
-
 
 int Is_Leaf_Node(TreeNode_t* node) {
     assert(node);

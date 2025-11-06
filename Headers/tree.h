@@ -1,8 +1,8 @@
 #ifndef TREE_H
 #define TREE_H 
 
-typedef int TreeElem_t;
-typedef int TreeErr_t;
+typedef char* TreeElem_t;
+typedef int   TreeErr_t;
 
 struct TreeNode_t {
     TreeElem_t  data;
