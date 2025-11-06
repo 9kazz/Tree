@@ -1,0 +1,20 @@
+digraph Tree {
+	rankdir = TB;
+	node [shape = Mrecord, style = "filled",  fillcolor = "#C0FFC0", color = darkgreen, width = 1, height = 1];
+	edge [color = "darkgreen"];
+
+	node_64 [label = " {3 | 0x503000000040 | {<left> (nil) | <right> (nil)}}", rank = 3]
+	node_112 [label = " {7 | 0x503000000070 | {<left> (nil) | <right> (nil)}}", rank = 3]
+	node_160 [label = " {5 | 0x5030000000a0 | {<left> 0x503000000040 | <right> 0x503000000070}}", rank = 2]
+	node_160: <left> -> node_64
+	node_160: <right> -> node_112
+	node_208 [label = " {15 | 0x5030000000d0 | {<left> (nil) | <right> (nil)}}", rank = 3]
+	node_352 [label = " {40 | 0x503000000160 | {<left> (nil) | <right> (nil)}}", rank = 3]
+	node_256 [label = " {20 | 0x503000000100 | {<left> 0x5030000000d0 | <right> 0x503000000160}}", rank = 2]
+	node_256: <left> -> node_208
+	node_256: <right> -> node_352
+	node_304 [label = " {10 | 0x503000000130 | {<left> 0x5030000000a0 | <right> 0x503000000100}}", rank = 1]
+	node_304: <left> -> node_160
+	node_304: <right> -> node_256
+
+}
