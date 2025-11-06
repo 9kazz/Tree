@@ -8,14 +8,38 @@
 #include "tree.h"
 #include "verify.h"
 
+Tree_t* Tree_Ctor(TreeElem_t root_value) {
 
-TreeNode_t* Node_Ctor(TreeElem_t data, TreeNode_t* left, TreeNode_t* right) {
+    TreeNode_t* root = Node_Ctor(root_value);
+    
+    SAFE_CALLOC(tree, 1, Tree_t)
+
+    tree->root = root;
+    
+    return tree;
+}
+
+TreeErr_t Tree_Dtor(Tree_t* tree) {
+
+    if ( ! tree) {
+        fprintf(stderr, "Node_Dtor: NULL-pointer to TreeNode_t\n");
+        return EC_NULL_POINTER;
+    }
+
+    Node_Dtor(tree->root);
+
+    free(tree);
+
+    return END_WITH_SUC;
+}
+
+TreeNode_t* Node_Ctor(TreeElem_t data) {
 
     SAFE_CALLOC(node, 1, TreeNode_t)
 
     node->data  = data;
-    node->left  = left;
-    node->right = right;
+    node->left  = NULL;
+    node->right = NULL;
 
     return node;
 }
@@ -50,7 +74,7 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
         {
             if (node_ptr->left == NULL) 
             {
-                node_ptr->left = Node_Ctor(value, NULL, NULL);
+                node_ptr->left = Node_Ctor(value);
                 return node_ptr->left;
             }
 
@@ -62,7 +86,7 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
         {
             if (node_ptr->right == NULL) 
             {
-                node_ptr->right = Node_Ctor(value, NULL, NULL);
+                node_ptr->right = Node_Ctor(value);
                 return node_ptr->right;
             }
 
