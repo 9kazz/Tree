@@ -25,8 +25,8 @@ enum util_constants {
                                                                                                             \
     FILE* name = temp_##name; 
 
-#define SAFE_SNPRINTF(str, size, text)                                                                      \
-    int snprintf_check_##str = snprintf(str, size, text);                                                   \
+#define SAFE_SNPRINTF(str, size, ...)                                                                       \
+    int snprintf_check_##str = snprintf(str, size, __VA_ARGS__);                                            \
                                                                                                             \
     if (snprintf_check_##str < 0)                                                                           \
         fprintf(stderr, "snprintf error (" #str ") in %s (%s:%d)\n", __func__, __FILE__, __LINE__);

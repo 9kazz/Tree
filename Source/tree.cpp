@@ -7,6 +7,7 @@
 #include "utils.h"
 #include "tree.h"
 #include "verify.h"
+#include "dump.h"
 
 Tree_t* Tree_Ctor(TreeElem_t root_value) {
 
@@ -16,19 +17,24 @@ Tree_t* Tree_Ctor(TreeElem_t root_value) {
 
     tree->root = root;
     
-    ONDEBUG(Node_Verify(tree->root))
+    Node_Verify(tree->root);
+    
+    ONDEBUG( DUMP_AFTER(tree) )
 
     return tree;
 }
 
 TreeErr_t Tree_Dtor(Tree_t* tree) {
+    assert(tree);
+
+    ONDEBUG( DUMP_BEFORE(tree) )
 
     if ( ! tree) {
         fprintf(stderr, "Node_Dtor: NULL-pointer to TreeNode_t\n");
         return EC_NULL_POINTER;
     }
 
-    ONDEBUG(Node_Verify(tree->root))
+    Node_Verify(tree->root);
     Node_Dtor(tree->root);
 
     free(tree);
@@ -44,13 +50,13 @@ TreeNode_t* Node_Ctor(TreeElem_t data) {
     node->left  = NULL;
     node->right = NULL;
 
-    ONDEBUG(Node_Verify(node))
+    Node_Verify(node);
     return node;
 }
 
 TreeErr_t Node_Dtor(TreeNode_t* node) {
     assert(node);
-    ONDEBUG(Node_Verify(tree->root))
+    Node_Verify(node);
 
     if ( ! node) {
         fprintf(stderr, "Node_Dtor: NULL-pointer to TreeNode_t\n");
@@ -71,8 +77,10 @@ TreeErr_t Node_Dtor(TreeNode_t* node) {
 TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
     assert(tree);
 
-    ONDEBUG(Node_Verify(tree->root))
+    Node_Verify(tree->root);
     TreeNode_t* node_ptr = tree->root;
+
+    ONDEBUG( DUMP_BEFORE(tree) )
 
     while(node_ptr != NULL)
     {
@@ -81,6 +89,8 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
             if (node_ptr->left == NULL) 
             {
                 node_ptr->left = Node_Ctor(value);
+                
+                ONDEBUG( DUMP_AFTER(tree) )
                 return node_ptr->left;
             }
 
@@ -93,6 +103,8 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
             if (node_ptr->right == NULL) 
             {
                 node_ptr->right = Node_Ctor(value);
+                
+                ONDEBUG( DUMP_AFTER(tree) )
                 return node_ptr->right;
             }
 
@@ -103,12 +115,13 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
 
     fprintf(stderr, "Node_Add: cannot to add new node\n");
 
+    ONDEBUG( DUMP_AFTER(tree) )
     return NULL;
 }
 
 int Is_Leaf_Node(TreeNode_t* node) {
     assert(node);
-    ONDEBUG(Node_Verify(tree->root))
+    Node_Verify(node);
 
     if (node->left  == NULL && 
         node->right == NULL )

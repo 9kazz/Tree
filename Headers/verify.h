@@ -14,7 +14,7 @@ enum error_codes {
     *Error_code = *Error_code | code;
 
 #define IF_CRITICAL_ERR(error_code)                     \
-    int temp_##error_code = error_code;                 \
+    TreeErr_t temp_##error_code = error_code;           \
     if (temp_##error_code >= EC_MIN_CRITICAL_ERROR)     \
         return temp_##error_code;
 
