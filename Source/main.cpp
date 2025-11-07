@@ -26,7 +26,7 @@ int main() {
     Node_Add(tree, "20");
     Node_Add(tree, "2");
     
-    Graphic_Dump_Node(tree->root);
+    Graphic_Dump_Node( (const Tree_t*) tree);
 
     Tree_Dtor(tree);
 

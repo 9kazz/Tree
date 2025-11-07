@@ -9,22 +9,17 @@
 #include "verify.h"
 #include "dump.h"
 
-TreeErr_t Graphic_Dump_Node(const TreeNode_t* node) {
-    assert(node);
+TreeErr_t Graphic_Dump_Node(const Tree_t* tree) {
+    assert(tree);
+
+    static size_t dump_num = 1;
 
     static const size_t MAX_DOT_CMD_LEN      = 256;
     char create_image_CMD [MAX_DOT_CMD_LEN] = {0};
 
     SAFE_FOPEN(graphviz_file, "dump_files/graphviz.txt", "w")
 
-    fprintf(graphviz_file, "digraph Tree {\n");
-    fprintf(graphviz_file, "\trankdir = TB;\n");
-    fprintf(graphviz_file, "\tnode [" SHAPE STYLE " fillcolor = " BRIGHT_GREEN ", color = darkgreen, width = 1, height = 1];\n");
-    fprintf(graphviz_file, "\tedge [color = \"darkgreen\"];\n\n");
-
-    Print_Node_to_Graphviz(node, graphviz_file);
-
-    fprintf(graphviz_file, "\n}\n");
+    Print_Tree_to_Graphviz(tree, graphviz_file);
 
     fclose(graphviz_file);
 
@@ -32,7 +27,9 @@ TreeErr_t Graphic_Dump_Node(const TreeNode_t* node) {
 
     system(create_image_CMD);
 
-    Dump_Node_to_HTML(node, "dump_files/image.png");
+    Dump_Node_to_HTML(tree->root, "dump_files/image.png");
+
+    ++dump_num;
 
     return END_WITH_SUC;
 }
@@ -87,6 +84,22 @@ TreeErr_t Dump_Node_inorder(const TreeNode_t* node, FILE* output_file) {
         Dump_Node_inorder(node->right, output_file);
 
     fprintf(output_file, ")");
+
+    return END_WITH_SUC;
+}
+
+TreeErr_t Print_Tree_to_Graphviz(const Tree_t* tree, FILE* output_file) {
+    assert(tree);
+    assert(output_file);
+
+    fprintf(output_file, "digraph Tree {\n");
+    fprintf(output_file, "\trankdir = TB;\n");
+    fprintf(output_file, "\tnode [" SHAPE STYLE " fillcolor = " BRIGHT_GREEN ", color = darkgreen, width = 1, height = 1];\n");
+    fprintf(output_file, "\tedge [color = \"darkgreen\"];\n\n");
+
+    Print_Node_to_Graphviz(tree->root, output_file);
+
+    fprintf(output_file, "\n}\n");
 
     return END_WITH_SUC;
 }

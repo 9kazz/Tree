@@ -16,6 +16,8 @@ Tree_t* Tree_Ctor(TreeElem_t root_value) {
 
     tree->root = root;
     
+    ONDEBUG(Node_Verify(tree->root))
+
     return tree;
 }
 
@@ -26,6 +28,7 @@ TreeErr_t Tree_Dtor(Tree_t* tree) {
         return EC_NULL_POINTER;
     }
 
+    ONDEBUG(Node_Verify(tree->root))
     Node_Dtor(tree->root);
 
     free(tree);
@@ -41,11 +44,13 @@ TreeNode_t* Node_Ctor(TreeElem_t data) {
     node->left  = NULL;
     node->right = NULL;
 
+    ONDEBUG(Node_Verify(node))
     return node;
 }
 
 TreeErr_t Node_Dtor(TreeNode_t* node) {
     assert(node);
+    ONDEBUG(Node_Verify(tree->root))
 
     if ( ! node) {
         fprintf(stderr, "Node_Dtor: NULL-pointer to TreeNode_t\n");
@@ -66,6 +71,7 @@ TreeErr_t Node_Dtor(TreeNode_t* node) {
 TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
     assert(tree);
 
+    ONDEBUG(Node_Verify(tree->root))
     TreeNode_t* node_ptr = tree->root;
 
     while(node_ptr != NULL)
@@ -102,6 +108,7 @@ TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
 
 int Is_Leaf_Node(TreeNode_t* node) {
     assert(node);
+    ONDEBUG(Node_Verify(tree->root))
 
     if (node->left  == NULL && 
         node->right == NULL )

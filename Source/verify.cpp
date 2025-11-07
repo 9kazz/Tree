@@ -19,9 +19,7 @@ TreeErr_t Node_Verify (TreeNode_t* node) {
         }
 
 
-    if_null_pointer(node,        &Error_code); IF_CRITICAL_ERR
-    // if_null_pointer(node->left,  &Error_code); IF_CRITICAL_ERR
-    // if_null_pointer(node->right, &Error_code); IF_CRITICAL_ERR
+    if_null_pointer(node, &Error_code); IF_CRITICAL_ERR
 
     fprintf(Logfile, "<h3 style = \"color: orange;\"> List_Verify: verification ended with warnings: %d\n </h3>", Error_code);
     return Error_code;
@@ -33,4 +31,4 @@ TreeErr_t if_null_pointer(void* pointer, TreeErr_t* Error_code) {
         PRINT_ERROR(EC_NULL_POINTER, "NULL pointer")
 
     return *Error_code;
-} 
+}
