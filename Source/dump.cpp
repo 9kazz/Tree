@@ -60,20 +60,24 @@ TreeErr_t Print_Node_to_Graphviz(const TreeNode_t* node, FILE* output_file) {
     static int node_rank = 0;
     ++node_rank;
 
-    if (node->left)
+    if (node->left){
         Print_Node_to_Graphviz(node->left, output_file);
-        
-    if (node->right)
+    } if (node->right) {
         Print_Node_to_Graphviz(node->right, output_file);
+    }
 
-    fprintf(output_file, "\tnode_%d [label = \" { %s | %p | {<left> %p | <right> %p}}\", rank = %d]\n", node, node->data, node, node->left, node->right, node_rank);
+    if ( Is_Leaf_Node( (TreeNode_t*) node) == IS_LEAF ) {
+        fprintf(output_file, "\tnode_%d [label = \" { %s | {<left> 0 | <right> 0}}\", rank = %d]\n", node, node->data, node_rank);
+    } else {
+        fprintf(output_file, "\tnode_%d [label = \" { %s | {<left> yes | <right> no}}\", rank = %d]\n", node, node->data, node_rank);
+    }
 
-    if (node->left)
+    if (node->left) {
         fprintf(output_file, "\tnode_%d: <left> -> node_%d\n", node, node->left);
-
-    if (node->right)
+    } if (node->right) {
         fprintf(output_file, "\tnode_%d: <right> -> node_%d\n", node, node->right);
-
+    }
+    
     --node_rank;
     return END_WITH_SUC;
 }

@@ -9,9 +9,9 @@
 #include "verify.h"
 #include "dump.h"
 
-Tree_t* Tree_Ctor(TreeElem_t root_value) {
+Tree_t* Tree_Ctor(void) {
 
-    TreeNode_t* root = Node_Ctor(root_value);
+    TreeNode_t* root = Node_Ctor("Neizvestno chto");
     
     SAFE_CALLOC(tree, 1, Tree_t)
 
@@ -72,51 +72,6 @@ TreeErr_t Node_Dtor(TreeNode_t* node) {
     free(node);
 
     return END_WITH_SUC;
-}
-
-TreeNode_t* Node_Add(Tree_t* tree, TreeElem_t value) {
-    assert(tree);
-
-    Node_Verify(tree->root);
-    TreeNode_t* node_ptr = tree->root;
-
-    ONDEBUG( DUMP_BEFORE(tree) )
-
-    while(node_ptr != NULL)
-    {
-        if ( atoi(value) <= atoi(node_ptr->data) )
-        {
-            if (node_ptr->left == NULL) 
-            {
-                node_ptr->left = Node_Ctor(value);
-                
-                ONDEBUG( DUMP_AFTER(tree) )
-                return node_ptr->left;
-            }
-
-            else
-                node_ptr = node_ptr->left;
-        }
-
-        else
-        {
-            if (node_ptr->right == NULL) 
-            {
-                node_ptr->right = Node_Ctor(value);
-                
-                ONDEBUG( DUMP_AFTER(tree) )
-                return node_ptr->right;
-            }
-
-            else
-                node_ptr = node_ptr->right;
-        }
-    }
-
-    fprintf(stderr, "Node_Add: cannot to add new node\n");
-
-    ONDEBUG( DUMP_AFTER(tree) )
-    return NULL;
 }
 
 int Is_Leaf_Node(TreeNode_t* node) {

@@ -4,9 +4,7 @@
 const int POISON = 0xDEADFACE;
 
 enum util_constants {
-    END_WITH_SUC = 1,
-    IS_LEAF      = 1,
-    NOT_LEAF     = 0
+    END_WITH_SUC = 1
 };
 
 #define SAFE_CALLOC(name, size_of_buf, el_type)                                                             \

@@ -22,7 +22,10 @@ TreeErr_t Node_Verify (TreeNode_t* node) {
     if_null_pointer(node, &Error_code); IF_CRITICAL_ERR
 
     #undef IF_CRITICAL_ERR
-    fprintf(Logfile, "<h3 style = \"color: orange;\"> List_Verify: verification ended with warnings: %d\n </h3>", Error_code);
+
+    if (Error_code != 0)
+        fprintf(Logfile, "<h3 style = \"color: orange;\"> List_Verify: verification ended with warnings: %d\n </h3>", Error_code);
+    
     return Error_code;
 }
 
