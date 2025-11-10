@@ -1,0 +1,16 @@
+digraph Tree {
+	rankdir = TB;
+	node [shape = Mrecord, style = "filled",  fillcolor = "#C0FFC0", color = darkgreen, width = 1, height = 1];
+	edge [color = "darkgreen"];
+
+	node_112 [label = " { Poltorashka | {<left> 0 | <right> 0}}", rank = 2]
+	node_208 [label = " { Petrovich | {<left> 0 | <right> 0}}", rank = 3]
+	node_256 [label = " { Neizvestno_chto | {<left> 0 | <right> 0}}", rank = 3]
+	node_160 [label = " { Vedet matan | {<left> yes | <right> no}}", rank = 2]
+	node_160: <left> -> node_208
+	node_160: <right> -> node_256
+	node_64 [label = " { Zhivotnoe | {<left> yes | <right> no}}", rank = 1]
+	node_64: <left> -> node_112
+	node_64: <right> -> node_160
+
+}

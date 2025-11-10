@@ -91,13 +91,6 @@ TreeErr_t Dump_Node_to_HTML(const TreeNode_t* node, const char* image_file_name,
     fprintf(Logfile, "<h3>Preorder: ");
     Dump_Node_preorder(node, Logfile);
 
-    fprintf(Logfile, "\n\nPostorder:");
-    Dump_Node_postorder(node, Logfile);
-
-    fprintf(Logfile, "\n\nInorder:  ");
-    Dump_Node_inorder(node, Logfile);
-    fprintf(Logfile, "</h3>\n");
-
     fprintf(Logfile, "\n<h3>\tImage:</h3>\n");
     fprintf(Logfile, "\t<img src = %s width = \"400\" height = \"400\">\n\n", image_file_name);
 
@@ -111,49 +104,16 @@ TreeErr_t Dump_Node_preorder(const TreeNode_t* node, FILE* output_file) {
 
     fprintf(output_file, "(");
 
-    fprintf(output_file, "%s", node->data);
+    fprintf(output_file, "\"%s\"", node->data);
+
+    if (Is_Leaf_Node( (TreeNode_t*) node ) == IS_LEAF)
+        fprintf(output_file, " nil nil");
 
     if (node->left)
         Dump_Node_preorder(node->left, output_file);
 
     if (node->right)
         Dump_Node_preorder(node->right, output_file);
-
-    fprintf(output_file, ")");
-
-    return END_WITH_SUC;
-}
-
-TreeErr_t Dump_Node_postorder(const TreeNode_t* node, FILE* output_file) {
-    assert(node);
-
-    fprintf(output_file, "(");
-
-    if (node->left)
-        Dump_Node_postorder(node->left, output_file);
-    
-    if (node->right)
-        Dump_Node_postorder(node->right, output_file);
-        
-    fprintf(output_file, "%s", node->data);
-
-    fprintf(output_file, ")");
-
-    return END_WITH_SUC;
-}
-
-TreeErr_t Dump_Node_inorder(const TreeNode_t* node, FILE* output_file) {
-    assert(node);
-
-    fprintf(output_file, "(");
-
-    if (node->left)
-        Dump_Node_inorder(node->left, output_file);
-
-    fprintf(output_file, "%s", node->data);
-
-    if (node->right)
-        Dump_Node_inorder(node->right, output_file);
 
     fprintf(output_file, ")");
 

@@ -9,15 +9,20 @@
 #include "verify.h"
 #include "dump.h"
 
-Tree_t* Tree_Ctor(void) {
+#define DATA(node)  node->data
+#define LEFT(node)  node->left
+#define RIGHT(node) node->right
+#define ROOT(tree)  tree->root
+
+Tree_t* Tree_Ctor() {
 
     TreeNode_t* root = Node_Ctor("Neizvestno chto");
     
     SAFE_CALLOC(tree, 1, Tree_t)
 
-    tree->root = root;
+    ROOT(tree) = root;
     
-    Node_Verify(tree->root);
+    Node_Verify(ROOT(tree));
     
     ONDEBUG( DUMP_AFTER(tree) )
 
@@ -34,8 +39,8 @@ TreeErr_t Tree_Dtor(Tree_t* tree) {
         return EC_NULL_POINTER;
     }
 
-    Node_Verify(tree->root);
-    Node_Dtor(tree->root);
+    Node_Verify(ROOT(tree));
+    Node_Dtor(ROOT(tree));
 
     free(tree);
 
@@ -44,9 +49,14 @@ TreeErr_t Tree_Dtor(Tree_t* tree) {
 
 TreeNode_t* Node_Ctor(TreeElem_t data) {
 
-    SAFE_CALLOC(node, 1, TreeNode_t)
+    const size_t MAX_NEW_NODE_DATA_LEN = 64;
 
-    node->data  = data;
+    SAFE_CALLOC(node, 1, TreeNode_t)
+    SAFE_CALLOC(data_aloc,  MAX_NEW_NODE_DATA_LEN + 1, char)
+
+    strncpy(data_aloc, data, MAX_NEW_NODE_DATA_LEN);
+
+    node->data  = data_aloc;
     node->left  = NULL;
     node->right = NULL;
 
@@ -63,12 +73,13 @@ TreeErr_t Node_Dtor(TreeNode_t* node) {
         return EC_NULL_POINTER;
     }
 
-    if (node->left)
-        Node_Dtor(node->left);
+    if (LEFT(node))
+        Node_Dtor(LEFT(node));
     
-    if (node->right)
-        Node_Dtor(node->right);
+    if (RIGHT(node))
+        Node_Dtor(RIGHT(node));
 
+    free(DATA(node));
     free(node);
 
     return END_WITH_SUC;
@@ -78,8 +89,8 @@ int Is_Leaf_Node(TreeNode_t* node) {
     assert(node);
     Node_Verify(node);
 
-    if (node->left  == NULL && 
-        node->right == NULL )
+    if (LEFT(node)  == NULL && 
+        RIGHT(node) == NULL )
     return IS_LEAF;
 
     return NOT_LEAF;

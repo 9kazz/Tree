@@ -50,21 +50,22 @@ TreeErr_t Create_new_node_aki(TreeNode_t* final_node) {
     #define MAX_NEW_NODE_DATA_LEN  64
     #define MAX_DIFFERENCE_LEN    128
 
-    SAFE_CALLOC(new_node_Yes_data, MAX_NEW_NODE_DATA_LEN + 1, char)
     SAFE_CALLOC(difference, MAX_DIFFERENCE_LEN + 1, char)
+    char new_node_Yes_data[MAX_NEW_NODE_DATA_LEN + 1] = {0};
 
     fprintf(output_file, "Kogo vy imeli v vidu?\n");
-    scanf( FORMAT_WITH_LIM(MAX_NEW_NODE_DATA_LEN, "s"), new_node_Yes_data);
+    scanf( " " FORMAT_WITH_LIM(MAX_NEW_NODE_DATA_LEN, "[^\n]"), new_node_Yes_data);
 
     fprintf(output_file, "Chem %s otlichayetsya ot %s?\n", new_node_Yes_data, DATA(final_node));
     fprintf(output_file, "On... ");
-    scanf( FORMAT_WITH_LIM(MAX_DIFFERENCE_LEN, "s"), difference);
+    scanf( " " FORMAT_WITH_LIM(MAX_DIFFERENCE_LEN, "[^\n]"), difference);
 
     TreeNode_t* new_node_Yes = Node_Ctor(new_node_Yes_data);
     TreeNode_t* new_node_No  = Node_Ctor(DATA(final_node));
 
     RIGHT(final_node) = new_node_No;
     LEFT(final_node)  = new_node_Yes;
+    free(DATA(final_node));
     DATA(final_node)  = difference;
 
     #undef MAX_NEW_NODE_DATA_LEN
@@ -89,10 +90,10 @@ TreeNode_t* Ask_and_Answer_until_leaf_aki(TreeNode_t* node) {
     user_answer = Read_Answer_aki(cur_node);
 
     if (user_answer == ANS_YES)  
-        cur_node = cur_node->left;
+        cur_node = LEFT(cur_node);
 
     else if (user_answer == ANS_NO)
-       cur_node = cur_node->right;
+       cur_node = RIGHT(cur_node);
 
     return Ask_and_Answer_until_leaf_aki(cur_node);
 }
