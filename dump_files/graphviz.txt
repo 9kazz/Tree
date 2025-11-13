@@ -3,14 +3,22 @@ digraph Tree {
 	node [shape = Mrecord, style = "filled",  fillcolor = "#C0FFC0", color = darkgreen, width = 1, height = 1];
 	edge [color = "darkgreen"];
 
-	node_112 [label = " { Poltorashka | {<left> 0 | <right> 0}}", rank = 2]
-	node_208 [label = " { Petrovich | {<left> 0 | <right> 0}}", rank = 3]
-	node_256 [label = " { Neizvestno_chto | {<left> 0 | <right> 0}}", rank = 3]
-	node_160 [label = " { Vedet matan | {<left> yes | <right> no}}", rank = 2]
-	node_160: <left> -> node_208
-	node_160: <right> -> node_256
-	node_64 [label = " { Zhivotnoe | {<left> yes | <right> no}}", rank = 1]
-	node_64: <left> -> node_112
-	node_64: <right> -> node_160
+	node_144 [label = " { Poltorashka | rank = 2 | anc = 0x504000000050 | ptr = 0x504000000090 | {<left> 0 | <right> 0}}", rank = 3]
+	node_208 [label = " { Sobaka | rank = 2 | anc = 0x504000000050 | ptr = 0x5040000000d0 | {<left> 0 | <right> 0}}", rank = 3]
+	node_80 [label = " { Cot | rank = 1 | anc = 0x504000000010 | ptr = 0x504000000050 | {<left> yes | <right> no}}", rank = 2]
+	node_80: <left> -> node_144 [dir = both]
+	node_80: <right> -> node_208 [dir = both]
+	node_400 [label = " { Baraban | rank = 3 | anc = 0x504000000150 | ptr = 0x504000000190 | {<left> 0 | <right> 0}}", rank = 4]
+	node_464 [label = " { Petrovich | rank = 3 | anc = 0x504000000150 | ptr = 0x5040000001d0 | {<left> 0 | <right> 0}}", rank = 4]
+	node_336 [label = " { Lector | rank = 2 | anc = 0x504000000110 | ptr = 0x504000000150 | {<left> yes | <right> no}}", rank = 3]
+	node_336: <left> -> node_400 [dir = both]
+	node_336: <right> -> node_464 [dir = both]
+	node_528 [label = " { Neizvestno_chto | rank = 2 | anc = 0x504000000110 | ptr = 0x504000000210 | {<left> 0 | <right> 0}}", rank = 3]
+	node_272 [label = " { Vedet matan | rank = 1 | anc = 0x504000000010 | ptr = 0x504000000110 | {<left> yes | <right> no}}", rank = 2]
+	node_272: <left> -> node_336 [dir = both]
+	node_272: <right> -> node_528 [dir = both]
+	node_16 [label = " { Zhivotnoe | rank = 0 | anc = (nil) | ptr = 0x504000000010 | {<left> yes | <right> no}}", rank = 1]
+	node_16: <left> -> node_80 [dir = both]
+	node_16: <right> -> node_272 [dir = both]
 
 }

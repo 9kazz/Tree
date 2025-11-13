@@ -29,4 +29,20 @@ enum util_constants {
     if (snprintf_check_##str < 0)                                                                           \
         fprintf(stderr, "snprintf error (" #str ") in %s (%s:%d)\n", __func__, __FILE__, __LINE__);
 
+
+#define SAFE_FSTAT(describtor, ptr_to_stat_struct)                                                          \
+    int stat_check_##file = fstat(describtor, ptr_to_stat_struct);                                          \
+                                                                                                            \
+    if (stat_check_##file == -1)                                                                            \
+        fprintf(stderr, "File stat error in function %s in %s:%d\n", __func__, __FILE__, __LINE__);         \
+    
+
+#define SAFE_FREAD(buffer, size_of_elem, count_of_elem, file)                                                                               \
+    int fread_check_##file = fread(buffer, size_of_elem, count_of_elem, file);                                                              \
+                                                                                                                                            \
+    if (fread_check_##file < count_of_elem)                                                                                                 \
+        fprintf(stderr, "Warning: error in fread or fread did not read any symbols (%s in %s:%d)\n", __func__, __FILE__, __LINE__);         \
+    
+    int skip_space(char* buffer, size_t size_of_buf, size_t cur_idx);
+
 #endif

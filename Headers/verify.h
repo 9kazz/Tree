@@ -3,7 +3,8 @@
 
 enum error_codes {
     EC_MIN_CRITICAL_ERROR = 1 << 10, // All errors more than this constant are critical
-    EC_NULL_POINTER       = 1 << 10
+    EC_NULL_POINTER       = 1 << 10,
+    EC_PARENT_ERR         = 2 << 10
 };
 
 #define PRINT_ERROR(code, text)                                                                 \
@@ -26,5 +27,6 @@ enum error_codes {
 
 TreeErr_t Node_Verify (TreeNode_t* node);
 TreeErr_t if_null_pointer(void* pointer, TreeErr_t* Error_code);
+TreeErr_t check_ancestor(TreeNode_t* node, TreeErr_t* Error_code);
 
 #endif

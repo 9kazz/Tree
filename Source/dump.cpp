@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "Logfile.h"
+#include "disk.h" 
 #include "utils.h"
 #include "tree.h"
 #include "verify.h"
@@ -67,15 +68,15 @@ TreeErr_t Print_Node_to_Graphviz(const TreeNode_t* node, FILE* output_file) {
     }
 
     if ( Is_Leaf_Node( (TreeNode_t*) node) == IS_LEAF ) {
-        fprintf(output_file, "\tnode_%d [label = \" { %s | {<left> 0 | <right> 0}}\", rank = %d]\n", node, node->data, node_rank);
+        fprintf(output_file, "\tnode_%d [label = \" { %s | rank = %d | anc = %p | ptr = %p | {<left> 0 | <right> 0}}\", rank = %d]\n", node, node->data, node->rank, node->parent, node, node_rank);
     } else {
-        fprintf(output_file, "\tnode_%d [label = \" { %s | {<left> yes | <right> no}}\", rank = %d]\n", node, node->data, node_rank);
+        fprintf(output_file, "\tnode_%d [label = \" { %s | rank = %d | anc = %p | ptr = %p | {<left> yes | <right> no}}\", rank = %d]\n", node, node->data, node->rank, node->parent, node, node_rank);
     }
 
     if (node->left) {
-        fprintf(output_file, "\tnode_%d: <left> -> node_%d\n", node, node->left);
+        fprintf(output_file, "\tnode_%d: <left> -> node_%d [dir = both]\n", node, node->left);
     } if (node->right) {
-        fprintf(output_file, "\tnode_%d: <right> -> node_%d\n", node, node->right);
+        fprintf(output_file, "\tnode_%d: <right> -> node_%d [dir = both]\n", node, node->right);
     }
     
     --node_rank;
@@ -91,31 +92,59 @@ TreeErr_t Dump_Node_to_HTML(const TreeNode_t* node, const char* image_file_name,
     fprintf(Logfile, "<h3>Preorder: ");
     Dump_Node_preorder(node, Logfile);
 
-    fprintf(Logfile, "\n<h3>\tImage:</h3>\n");
-    fprintf(Logfile, "\t<img src = %s width = \"400\" height = \"400\">\n\n", image_file_name);
+    fprintf(Logfile, "\n<h3>Image:</h3>\n");
+    fprintf(Logfile, "\t<img src = %s width = \"600\" height = \"600\">\n\n", image_file_name);
 
     fprintf(Logfile, "</pre>");
 
     return END_WITH_SUC;
 }
 
-TreeErr_t Dump_Node_preorder(const TreeNode_t* node, FILE* output_file) {
-    assert(node);
+// TreeErr_t Dump_disk_buffer (char* disk_buffer, size_t cur_pos, size_t size_of_file) {
+//     assert(disk_buffer);
 
-    fprintf(output_file, "(");
+//     fprintf(Logfile, "<h1>Dump of disk_buffer\n");
 
-    fprintf(output_file, "\"%s\"", node->data);
+//     fprintf(Logfile, "<span style = \"color: grey;\">");
 
-    if (Is_Leaf_Node( (TreeNode_t*) node ) == IS_LEAF)
-        fprintf(output_file, " nil nil");
+//     for (size_t pos = 0; pos < cur_pos; pos++)
+//         fprintf(Logfile, "%c", disk_buffer[pos]);
 
-    if (node->left)
-        Dump_Node_preorder(node->left, output_file);
+//     fprintf(Logfile, "</span>");
 
-    if (node->right)
-        Dump_Node_preorder(node->right, output_file);
+//     fprintf(Logfile, "<span style = \"color: orange;\">%d</span>", disk_buffer[cur_pos]);
 
-    fprintf(output_file, ")");
+//     fprintf(Logfile, "<span style = \"color: blue;\">");
+    
+//     for (size_t pos = cur_pos + 1; pos < size_of_file; pos++)
+//         fprintf(Logfile, "%c", disk_buffer[pos]);
+
+//     fprintf(Logfile, "</span>");
+
+//     fprintf(Logfile, "</h1>\n");
+
+//     return END_WITH_SUC;
+// }
+
+TreeErr_t Dump_disk_buffer (char* disk_buffer, size_t cur_pos, size_t size_of_file) {
+    assert(disk_buffer);
+
+    fprintf(stdout, "\"");
+
+    for (size_t pos = 0; pos < cur_pos; pos++) {
+        if (disk_buffer[pos] == '\0') fprintf(stdout, T_RED "0" T_RESET);
+        else                          fprintf(stdout, T_GREY "%c" T_RESET, disk_buffer[pos]);
+    }
+
+    if (disk_buffer[cur_pos] == '\0') fprintf(stdout, T_RED "0" T_RESET);
+    else                          fprintf(stdout, T_BG_YELLOW "%c" T_RESET, disk_buffer[cur_pos]);
+    
+    for (size_t pos = cur_pos + 1; pos < size_of_file; pos++) {
+        if (disk_buffer[pos] == '\0') fprintf(stdout, T_RED "0" T_RESET);
+        else                          fprintf(stdout, T_BRIGHT_BLUE "%c" T_RESET, disk_buffer[pos]);
+    }
+
+    fprintf(stdout, "\"\n");
 
     return END_WITH_SUC;
 }

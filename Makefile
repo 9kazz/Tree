@@ -1,6 +1,6 @@
 TARGET = program
 
-OBJECTS     = main.o utils.o tree.o verify.o dump.o akinator.o
+OBJECTS     = main.o utils.o tree.o verify.o dump.o akinator.o disk.o
 SOURCE_DIR  = ./Source/
 HEADERS_DIR = ./Headers/
 
